@@ -1,3 +1,5 @@
+#! /usr/bin/python3
+
 # mtu_trk.py
 #
 # Extracts data from MTU.TRK, which includes English-Turkish dictionary and
