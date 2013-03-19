@@ -12,7 +12,7 @@
 #     4- List of Turkish definitions (702248 bytes)
 # All text is encoded in CP 857.
 
-import codecs
+import os
 import struct
 
 # In MTU.TRK, possibly to reduce the file size and/or obfuscate the data, some
@@ -110,8 +110,8 @@ def ExpandMorpheme(prefix_index, morpheme, previous_morpheme, instruction, suffi
 
     return prefix + morpheme
 
-def ReadFile():
-    data = open("data\\MTU.TRK", "rb").read()
+def Import(dictionary, path):
+    data = open(path, "rb").read()
 
     # Skip first 3 bytes. Not sure why these bytes exist, but it's all empty 
     # anyway.
@@ -127,7 +127,6 @@ def ReadFile():
     base_offset = pos
 
     # Read English and Turkish words
-    dictionary = []
     previous_word = ''
     for i in range(0, len(offsets)):
         # Read all entries within the offset range
@@ -162,7 +161,7 @@ def ReadFile():
             # hurricane, jut, march, orient, performance, rubbishy
             if tr_offset > 0:
                 tr_pos = base_offset + tr_offset
-                tr_len = struct.unpack("<H", data[tr_pos: tr_pos + 2])[0]
+                tr_len = struct.unpack("<H", data[tr_pos:tr_pos + 2])[0]
                 tr_pos += 2
                 if tr_len > 0:
                     turkish = data[tr_pos:tr_pos + tr_len]
@@ -176,14 +175,21 @@ def ReadFile():
             # Add a new entry to our dictionary
             dictionary.append((english, turkish))
 
+def Export(dictionary, path):
     # Export in plain text. This results in 17988 entries in total, including 14
     # invalid ones.
-    with codecs.open("output\\MTU.TRK.TXT", "w", "utf-8") as file:
+    with open(path, "w", encoding="utf-8") as file:
         for english, turkish in dictionary:
             file.write(english)
             file.write(' ' * (30 - len(english))) # padding
             file.write(turkish)
             file.write('\n')
 
+def main():
+    dictionary = []
+    Import(dictionary, os.path.join("..", "data", "MTU.TRK"))
+    print("Imported", len(dictionary), "entries.")
+    Export(dictionary, os.path.join("..", "output", "MTU.TRK.TXT"))
+
 if __name__ == "__main__":
-    ReadFile()
+    main()
