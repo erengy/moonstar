@@ -7,7 +7,7 @@
 #     1- Empty header (3 bytes)
 #     2- Offset map for 2-letter prefixes (2028 bytes)
 #     3- List of English words (127519 bytes)
-#     4- List of Turkish words (702248 bytes)
+#     4- List of Turkish definitions (702248 bytes)
 # All text is encoded in CP 857.
 
 import codecs
@@ -69,7 +69,7 @@ suffixes = [
 
 def ExpandMorpheme(prefix_index, morpheme, previous_morpheme, instruction, suffix_index):
     # Calculate first two letters using prefix index. We have 26 * 26 = 676
-    # prefixes in total (aa-zz), although only 253 of them are actually used in
+    # possible prefixes in total (aa-zz), although only 253 of them are used in
     # dictionary entries.
     prefix = chr(ord('a') + prefix_index // 26) + chr(ord('a') + prefix_index % 26)
 
