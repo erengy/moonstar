@@ -1,2 +1,4 @@
+data/*
+!data/README
 output/
-TODO.txt
+temp/

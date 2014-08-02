@@ -2,8 +2,8 @@
 
 # mtu_trk.py
 #
-# Extracts data from MTU.TRK, which includes English-Turkish dictionary and
-# İngilizce Leb Demeden feature.
+# Extracts data from MTU.TRK, which is required for English-Turkish dictionary
+# and İngilizce Leb Demeden feature.
 #
 # MTU.TRK consists of four parts:
 #     1- Empty header (3 bytes)
@@ -176,8 +176,6 @@ def Import(dictionary, path):
             dictionary.append((english, turkish))
 
 def Export(dictionary, path):
-    # Export in plain text. This results in 17988 entries in total, including 14
-    # invalid ones.
     with open(path, "w", encoding="utf-8") as file:
         for english, turkish in dictionary:
             file.write(english)
@@ -188,8 +186,8 @@ def Export(dictionary, path):
 def main():
     dictionary = []
     Import(dictionary, os.path.join("..", "data", "MTU.TRK"))
-    print("Imported", len(dictionary), "entries.")
     Export(dictionary, os.path.join("..", "output", "MTU.TRK.TXT"))
+    print("Exported", len(dictionary), "entries.") # 17988
 
 if __name__ == "__main__":
     main()
